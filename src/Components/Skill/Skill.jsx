@@ -35,7 +35,6 @@ const Skills = () => {
             </ul>
           </div>
 
-          {/* Web Technologies & Developer Tools */}
           <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-md">
             <h3 className="text-xl md:text-2xl font-semibold mb-4 flex items-center">
               Web Technologies & Developer Tools
@@ -63,7 +62,6 @@ const Skills = () => {
             </ul>
           </div>
 
-          {/* Frameworks and Tools */}
           <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-md">
             <h3 className="text-xl md:text-2xl font-semibold mb-4 flex items-center">
               Frameworks & Tools

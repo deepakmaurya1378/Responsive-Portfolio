@@ -9,7 +9,6 @@ const Education = () => {
           Education
         </h2>
         <div className="flex flex-col md:flex-row md:space-x-8 space-y-8 md:space-y-0">
-          {/* High School */}
           <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-md w-full md:w-1/3">
             <h3 className="text-xl  gap-5 md:text-2xl font-bold mb-2 ">
               High School
@@ -25,7 +24,6 @@ const Education = () => {
             </p>
           </div>
 
-          {/* Intermediate */}
           <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-md w-full md:w-1/3">
             <h3 className="text-xl gap-5  md:text-2xl font-bold mb-2">
               Intermediate
@@ -40,8 +38,7 @@ const Education = () => {
               <strong>Percentage:</strong> 72.20%
             </p>
           </div>
-
-          {/* College */}
+          
           <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-md w-full md:w-1/3">
             <h3 className="text-xl gap-5 md:text-2xl font-bold mb-2">
               College

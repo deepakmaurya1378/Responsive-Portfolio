@@ -2,7 +2,6 @@ import image1 from '../../picture/image1.gif'
 function Home() {
   return (
     <div className="text-white w-full flex flex-col md:flex-row justify-between items-start p-10 md:p-20">
-  {/* Text Section */}
   <div className="md:w-1/2 md:pr-10 mt-10">
     <h1 className="text-3xl md:text-6xl font-bold leading-tight tracking-tighter hover:text-blue-400">
       Hello, <br />
@@ -19,7 +18,6 @@ function Home() {
     
   </div>
 
-  {/* Image Section */}
   <div className="md:w-1/3 mt-10 mr-20 ml-20">
     <img
       src={image1}

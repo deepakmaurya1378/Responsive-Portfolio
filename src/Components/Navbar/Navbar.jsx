@@ -1,61 +1,132 @@
-import { RiCloseLine, RiMenu2Line } from "@remixicon/react";
 import { useState } from "react";
 
 function Navbar() {
   const [menu, openMenu] = useState(false);
 
   return (
-    <nav className="flex flex-wrap justify-between md:items-center text-white px-10 pt-6 md:px-20 shadow-lg h-20 ">
-      <span className="text-xl font-bold tracking-wide mb-2">Portfolio</span>
-      {/* Mobile and desktop menu items */}
-      <ul
-        className={`${
-          menu ? "block" : "hidden"
-        } mx-24 mt-4 font-semibold md:mt-0 bg-black px-2 rounded-xl bg-opacity-30 md:border-none text-center md:bg-transparent md:static md:mx-0 md:flex gap-6 mb-4`}
-      >
-        
+    <nav className="flex justify-between items-center text-white px-6 md:px-20 py-4 shadow-lg bg-gray-900">
+     
+      <span className="text-2xl font-bold tracking-wide">Portfolio</span>
+
+      {/* Desktop Navigation Links */}
+      <ul className="hidden md:flex gap-8 font-semibold">
         <li>
-          <a href="#Education" className="text-md transition-all duration-300 p-1 md:p-0">
+          <a href="#Education" className="hover:text-gray-400 transition">
             Education
           </a>
-              </li>
-              <li>
-          <a href="#Skills" className="text-md   transition-all duration-300 p-1 md:p-0 ">
-            Skill
+        </li>
+        <li>
+          <a href="#Skills" className="hover:text-gray-400 transition">
+            Skills
           </a>
         </li>
         <li>
-          <a href="#Projects" className="text-md transition-all duration-300 p-1 md:p-0">
-            Project
+          <a href="#Projects" className="hover:text-gray-400 transition">
+            Projects
           </a>
         </li>
         <li>
-          <a href="#Contact" className="text-md transition-all duration-300 p-1 md:p-0">
+          <a href="#Contact" className="hover:text-gray-400 transition">
             Contact
           </a>
-              </li>
-              <li>
-          <a href="https://linktr.ee/deepak_maurya112" className="text-md transition-all duration-300 p-1 md:p-0">
+        </li>
+        <li>
+          <a
+            href="https://linktr.ee/deepak_maurya112"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-gray-400 transition"
+          >
             Linktree
           </a>
         </li>
       </ul>
 
-      {/* Hamburger and close icons for mobile */}
-      <div className="md:hidden absolute right-10 top-6 transition-all duration-30 ">
-        {menu ? (
-          <RiCloseLine
-            size={30}
-            className="cursor-pointer"
-            onClick={() => openMenu(!menu)}
-          />
-        ) : (
-          <RiMenu2Line
-            size={30}
-            className="cursor-pointer"
-            onClick={() => openMenu(!menu)}
-          />
-        )}
+      {/* Hamburger Menu Button */}
+      <button
+        className="md:hidden flex flex-col items-center justify-center space-y-1"
+        onClick={() => openMenu(!menu)}
+        aria-label="Toggle Menu"
+      >
+        <span
+          className={`block w-6 h-0.5 bg-white transition-transform ${
+            menu ? "rotate-45 translate-y-1.5" : ""
+          }`}
+        ></span>
+        <span
+          className={`block w-6 h-0.5 bg-white transition-opacity ${
+            menu ? "opacity-0" : "opacity-100"
+          }`}
+        ></span>
+        <span
+          className={`block w-6 h-0.5 bg-white transition-transform ${
+            menu ? "-rotate-45 -translate-y-1.5" : ""
+          }`}
+        ></span>
+      </button>
+
+      {/* Sliding Mobile Menu */}
+      <div
+        className={`fixed top-0 right-0 h-full w-64 bg-gray-800 text-white z-50 transform ${
+          menu ? "translate-x-0" : "translate-x-full"
+        } transition-transform duration-300 shadow-lg`}
+      >
+        <button
+          className="absolute top-4 right-4 text-2xl focus:outline-none"
+          onClick={() => openMenu(false)}
+          aria-label="Close Menu"
+        >
+          ✕
+        </button>
+        <ul className="flex flex-col gap-6 mt-16 font-semibold text-center">
+          <li>
+            <a
+              href="#Education"
+              className="hover:text-gray-400 transition"
+              onClick={() => openMenu(false)}
+            >
+              Education
+            </a>
+          </li>
+          <li>
+            <a
+              href="#Skills"
+              className="hover:text-gray-400 transition"
+              onClick={() => openMenu(false)}
+            >
+              Skills
+            </a>
+          </li>
+          <li>
+            <a
+              href="#Projects"
+              className="hover:text-gray-400 transition"
+              onClick={() => openMenu(false)}
+            >
+              Projects
+            </a>
+          </li>
+          <li>
+            <a
+              href="#Contact"
+              className="hover:text-gray-400 transition"
+              onClick={() => openMenu(false)}
+            >
+              Contact
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://linktr.ee/deepak_maurya112"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-400 transition"
+              onClick={() => openMenu(false)}
+            >
+              Linktree
+            </a>
+          </li>
+        </ul>
       </div>
     </nav>
   );
