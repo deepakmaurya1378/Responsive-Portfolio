@@ -8,7 +8,7 @@ const Projects = () => {
       <div className="container mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-8">My Project</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="flex flex-wrap justify-center gap-8">
           <ProjectCard 
              title="AI Mock Interview"
              image={img2}    
