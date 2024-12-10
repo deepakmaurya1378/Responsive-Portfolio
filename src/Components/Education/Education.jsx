@@ -2,7 +2,7 @@ const Education = () => {
   return (
     <section
       id="Education"
-      className="bg-gray-900 m-20 text-white py-16 px-6 md:px-20 rounded-lg shadow-xl"
+      className="bg-gray-900 m-5 text-white py-16 px-6 md:px-20 rounded-lg shadow-xl"
     >
       <div className="container mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">

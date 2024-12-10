@@ -4,7 +4,7 @@ import img1 from "../../Assests/Screenshot (4).png"
 import img3 from "../../Assests/Screenshot (3).png"
 const Projects = () => {
   return (
-    <section id="Projects" className="bg-gray-900 m-20 text-white py-16 px-6 md:px-20 rounded-lg shadow-xl">
+    <section id="Projects" className="bg-gray-900 m-5 text-white py-16 px-6 md:px-20 rounded-lg shadow-xl">
       <div className="container mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-8">My Project</h2>
         
