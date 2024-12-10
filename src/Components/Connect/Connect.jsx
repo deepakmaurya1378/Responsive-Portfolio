@@ -1,4 +1,43 @@
+import { useState } from "react";
+import emailjs from "emailjs-com";
+
 const Contact = () => {
+  const [statusMessage, setStatusMessage] = useState("");
+  const sendEmail = (event) => {
+    event.preventDefault();  // Prevent form from reloading the page
+
+    const userName = event.target.name.value;
+    const userEmail = event.target.email.value;
+    const userMessage = event.target.message.value;
+
+    // Define recipient name
+    const toName = "Deepak Maurya";
+
+    // Send email using EmailJS
+    emailjs
+      .send(
+        "service_5h0344g", // Replace with your actual Service ID
+        "template_oviizwo", // Replace with your actual Template ID
+        {
+          to_name: toName,
+          from_name: userName,
+          email_id: userEmail,
+          message: userMessage,
+        },
+        "hqrCcUjgV1VRMZh9H" // Replace with your actual API key
+      )
+      .then(
+        () => {
+          setStatusMessage("Email sent successfully!");
+          event.target.reset(); // Reset form after successful submission
+        },
+        (error) => {
+          setStatusMessage("Failed to send email. Please try again later.");
+          console.error("EmailJS error:", error); // Log error for debugging
+        }
+      );
+  };
+
   return (
     <div
       id="Contact"
@@ -10,9 +49,15 @@ const Contact = () => {
         Feel free to fill my inbox.
       </p>
 
+      {statusMessage && (
+        <div className="text-center mb-4 text-lg font-semibold">
+          {statusMessage}
+        </div>
+      )}
+
       <form
-        action="https://formsubmit.co/deepakmaurya1378@gmail.com"
-        method="POST"
+        id="contact-form"
+        onSubmit={sendEmail}
         className="w-full max-w-2xl flex flex-col gap-6"
       >
         <div className="flex flex-col">
