@@ -8,7 +8,7 @@ const DownloadResume = () => {
           Click the button below to download my most up-to-date resume.
         </p>
         <a
-          href="https://drive.google.com/file/d/1Ac1OsxFXcwSKBLiKOqwh_O21VSqbc7Iv/view" // path to your resume file
+          href="https://drive.google.com/file/d/19CSsXuk3fGntAj7lMKjnIhUVKPZfs87w/view?usp=sharing" // path to your resume file
           download="Deepak_Maurya_Resume" // optional custom name for the downloaded file
           className="bg-blue-500 text-white py-3 px-8 rounded-full hover:bg-blue-600 transition duration-300"
         >

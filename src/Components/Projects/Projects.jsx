@@ -16,13 +16,14 @@ const Projects = () => {
             srcCode='https://github.com/deepakmaurya1378/Prep-genin'      
             main="A web-based application that simulates mock technical interviews using AI, providing real-time feedback based on your answers."
           />
-          <ProjectCard 
-            title="Currency Converter"
-            image={img3}  
-            demoLink='https://currency-converter-two-orpin.vercel.app/'
-            srcCode='https://github.com/deepakmaurya1378/Currency-Converter'
-            main="Developed a web-based currency converter that allows users to convert amounts between different currencies in real-time."
-          />
+          <ProjectCard
+                title="Chat Application"
+                image={img3}  
+            demoLink='https://fullstack-chatapp-w3ne.onrender.com/login'
+            srcCode='https://github.com/deepakmaurya1378/'
+            
+                main="A real-time chat app allows seamless communication using the MERN stack (MongoDB, Express.js, React.js, Node.js), Socket.io for WebSocket communication, and JWT for secure authentication."
+                />
                   {/* Add more ProjectCard components as needed */}
                 <ProjectCard
                 title="Tic Tac Toe"
