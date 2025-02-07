@@ -1,6 +1,6 @@
 import { ProjectCard } from "./ProjectCard";
 import img2 from "../../Assests/Screenshot (2).png"
-import img1 from "../../Assests/Screenshot (4).png"
+import img1 from "../../Assests/Screenshot (8).png"
 import img3 from "../../Assests/Screenshot (3).png"
 const Projects = () => {
   return (
@@ -26,13 +26,13 @@ const Projects = () => {
                 />
                   {/* Add more ProjectCard components as needed */}
                 <ProjectCard
-                title="Tic Tac Toe"
+                title="Neuro Nest"
                 image={img1}  
-            demoLink='https://tic-tak-toe-dusky.vercel.app/'
-            srcCode='https://github.com/deepakmaurya1378/Tic-Tak'
+            demoLink='https://neuro-nest-frontend.vercel.app/'
+            srcCode='https://github.com/deepakmaurya1378/Neuro-Nest-Frontend'
             
-                main="A web-based game that simulates the classic Tic Tac Toe game. Players alternate marking spaces and aim to get three marks in a row."
-                />
+                main="A Therapy App connects clients with therapists for easy session booking and communication. Clients can track 
+their emotions through a journal, while therapists can manage sessions and chat with clients"/>
                   
         </div>
       </div>
