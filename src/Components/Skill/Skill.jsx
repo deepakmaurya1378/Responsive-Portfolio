@@ -1,90 +1,188 @@
-import { FaJava, FaPython, FaJs, FaReact, FaNodeJs, FaGithub } from "react-icons/fa";
-import { SiMysql, SiMongodb, SiTailwindcss, SiNextdotjs } from "react-icons/si";
-import { DiCss3, DiHtml5 } from "react-icons/di";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { skillGroups } from "../../data/portfolio";
+import useInView from "../../hooks/useInView";
+import Reveal from "../Reveal";
+import { Section, SectionHeading } from "../ui";
 
+const leafCount = skillGroups.reduce((n, g) => n + g.skills.length, 0);
+const LINE = "bg-slate-600";
 
+const DFS = ["root", ...skillGroups.flatMap((g, i) => [`c${i}`, ...g.skills.map((_, j) => `c${i}-${j}`)])];
+const BFS = ["root", ...skillGroups.map((_, i) => `c${i}`), ...skillGroups.flatMap((g, i) => g.skills.map((_, j) => `c${i}-${j}`))];
+const nameOf = (id) => {
+  if (id === "root") return "skills";
+  const [, c, l] = id.match(/^c(\d+)(?:-(\d+))?$/);
+  return l === undefined ? skillGroups[c].title : skillGroups[c].skills[l][1];
+};
+
+const tone = (state) =>
+  state === "current"
+    ? "border-amber-300 bg-amber-300/20 text-white shadow-lg shadow-amber-500/30 scale-105"
+    : state === "visited"
+      ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-100"
+      : "";
 
 const Skills = () => {
+  const treeRef = useRef(null);
+  const inView = useInView(treeRef, { threshold: 0.15 });
+  const [collapsed, setCollapsed] = useState(() => new Set());
+  const [run, setRun] = useState(null); // { order, step, kind }
+
+  useEffect(() => {
+    const el = treeRef.current;
+    if (el && el.scrollWidth > el.clientWidth) el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+  }, []);
+
+  useEffect(() => {
+    if (!run) return;
+    if (run.step >= run.order.length) {
+      const t = setTimeout(() => setRun(null), 1800);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => setRun((r) => ({ ...r, step: r.step + 1 })), run.step === 0 ? 300 : 110);
+    return () => clearTimeout(t);
+  }, [run]);
+
+  const state = useMemo(() => {
+    if (!run) return () => "";
+    const visited = new Set(run.order.slice(0, run.step));
+    const current = run.order[run.step - 1];
+    return (id) => (id === current ? "current" : visited.has(id) ? "visited" : "");
+  }, [run]);
+
+  const start = (kind) => {
+    setCollapsed(new Set());
+    setRun({ kind, order: kind === "DFS" ? DFS : BFS, step: 0 });
+  };
+  const toggle = (i) =>
+    setCollapsed((s) => {
+      const n = new Set(s);
+      n.has(i) ? n.delete(i) : n.add(i);
+      return n;
+    });
+
+  const last = skillGroups.length - 1;
+  const trail = run ? run.order.slice(Math.max(0, run.step - 6), run.step).map(nameOf) : [];
+
   return (
-    
-    <section
-      id="Skills"
-      className="bg-gray-900 m-5 text-white py-16 px-6 md:px-20 rounded-lg shadow-xl"
-    >
-      <div className="container mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">Skills</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Programming Languages */}
-          <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-md">
-            <h3 className="text-xl md:text-2xl font-semibold mb-4 flex items-center">
-              Programming Languages
-            </h3>
-            <ul className="space-y-2">
-              <li className="flex items-center">
-                <FaJava className="mr-2 size-7" /> Java
-              </li>
-              <li className="flex items-center">
-                <FaPython className="mr-2 size-7" /> Python
-              </li>
-              <li className="flex items-center">
-                <FaJs className="mr-2 size-7" /> JavaScript
-              </li>
-              <li className="flex items-center">
-                <SiMysql className="mr-2 size-7" /> SQL
-              </li>
-            </ul>
-          </div>
+    <Section id="skills" className="bg-slate-900/30">
+      <SectionHeading
+        index="06"
+        ds="Tree"
+        title="Skills"
+        code={
+          <>
+            skills.<span className="text-sky-300">traverse</span>(root); <span className="text-slate-500">→</span> {skillGroups.length} branches, {leafCount} leaves
+          </>
+        }
+      />
 
-          <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-md">
-            <h3 className="text-xl md:text-2xl font-semibold mb-4 flex items-center">
-              Web Technologies & Developer Tools
-            </h3>
-            <ul className="space-y-2 ">
-              <li className="flex items-center">
-                <DiHtml5 className="mr-2 size-7" /> HTML
-              </li>
-              <li className="flex items-center">
-                <DiCss3 className="mr-2 size-7" /> CSS
-              </li>
-              <li className="flex items-center">
-                <SiTailwindcss className="mr-2 size-7" /> Tailwind CSS
-              </li>
-              {/* Developer Tools */}
-              <li className="flex items-center">
-                <FaGithub className="mr-2 size-7" /> GitHub
-              </li>
-              <li className="flex items-center ">
-                <FaJava className="mr-2 size-7" /> Intelije 
-              </li>
-              <li className="flex items-center ml-7">
-                  VS Code
-              </li>
-            </ul>
-          </div>
+      <div className="mb-8 flex flex-wrap items-center gap-3 font-mono text-sm">
+        <button
+          type="button"
+          onClick={() => start("DFS")}
+          disabled={!!run}
+          className="rounded-lg border border-slate-700 px-3 py-1.5 text-slate-200 transition-colors hover:border-amber-300 hover:text-amber-200 disabled:opacity-40"
+        >
+          ▶ dfs(root)
+        </button>
+        <button
+          type="button"
+          onClick={() => start("BFS")}
+          disabled={!!run}
+          className="rounded-lg border border-slate-700 px-3 py-1.5 text-slate-200 transition-colors hover:border-amber-300 hover:text-amber-200 disabled:opacity-40"
+        >
+          ▶ bfs(root)
+        </button>
+        <span className="min-w-0 flex-1 truncate text-slate-400">
+          {run ? (
+            <>
+              <span className="text-amber-300">{run.kind}</span> visited {Math.min(run.step, run.order.length)}/{run.order.length}
+              {trail.length > 0 && <span className="text-slate-500"> · … {trail.join(" → ")}</span>}
+            </>
+          ) : (
+            null
+          )}
+        </span>
+      </div>
 
-          <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-md">
-            <h3 className="text-xl md:text-2xl font-semibold mb-4 flex items-center">
-              Frameworks & Tools
-            </h3>
-            <ul className="space-y-2">
-              <li className="flex items-center">
-                <FaReact className="mr-2 size-7" /> React
+      <div ref={treeRef} className="-mx-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+        <div className="min-w-[1060px] lg:min-w-0">
+        <div className="flex flex-col items-center">
+          <Reveal anim="pop" show={inView}>
+            <span
+              className={`inline-block rounded-xl border border-sky-400/70 bg-sky-400/10 px-6 py-3 font-mono text-lg font-bold text-sky-200 shadow-lg shadow-sky-900/50 transition-all ${tone(state("root"))}`}
+            >
+              skills
+            </span>
+          </Reveal>
+          <span
+            className={`block h-8 w-0.5 origin-top ${LINE}`}
+            style={{ transform: inView ? undefined : "scaleY(0)", animation: inView ? "ds-grow-y 300ms ease-out 300ms both" : "none" }}
+          />
+        </div>
+
+        <ul className="grid grid-cols-7">
+          {skillGroups.map((group, i) => {
+            const open = !collapsed.has(i);
+            return (
+              <li key={group.title} className="relative flex min-w-0 flex-col items-center px-1.5">
+                {i > 0 && <span className={`absolute left-0 right-1/2 top-0 h-0.5 ${LINE}`} />}
+                {i < last && <span className={`absolute left-1/2 right-0 top-0 h-0.5 ${LINE}`} />}
+                <span className={`h-5 w-0.5 ${LINE}`} />
+
+                <Reveal anim="pop" show={inView} delay={450 + i * 90} duration={450} className="w-full">
+                  <button
+                    type="button"
+                    onClick={() => toggle(i)}
+                    aria-expanded={open}
+                    className={`flex w-full items-center justify-between gap-2 rounded-lg border border-violet-400/50 bg-violet-400/10 px-3 py-2 text-left font-mono text-sm font-bold text-violet-100 transition-all hover:border-violet-300 ${tone(state(`c${i}`))}`}
+                  >
+                    <span className="leading-tight">{group.title}</span>
+                    <span className="text-xs text-violet-300">{open ? "▾" : `▸ ${group.skills.length}`}</span>
+                  </button>
+                </Reveal>
+
+                {open && (
+                  <ul className="mt-1 w-full pl-3">
+                    {group.skills.map(([Icon, name], j) => {
+                      const isLast = j === group.skills.length - 1;
+                      return (
+                        <Reveal
+                          as="li"
+                          key={name}
+                          anim="fade-left"
+                          show={inView}
+                          delay={700 + i * 90 + j * 45}
+                          duration={350}
+                          className="relative pl-4 pt-2"
+                        >
+                          <span className={`absolute left-0 top-0 w-0.5 ${LINE} ${isLast ? "h-[calc(50%+4px)]" : "h-full"}`} />
+                          <span className={`absolute left-0 top-[calc(50%+4px)] h-0.5 w-3.5 ${LINE}`} />
+                          <span
+                            className={`flex items-center gap-2 rounded-md border border-slate-800 bg-slate-950/70 px-2 py-1.5 text-[13px] text-slate-200 transition-all ${tone(state(`c${i}-${j}`))}`}
+                          >
+                            <Icon className="shrink-0 text-slate-400" />
+                            <span className="min-w-0 leading-tight">{name}</span>
+                          </span>
+                        </Reveal>
+                      );
+                    })}
+                  </ul>
+                )}
               </li>
-              <li className="flex items-center">
-                <SiNextdotjs className="mr-2 size-7" /> Next.js
-              </li>
-              <li className="flex items-center">
-                <FaNodeJs className="mr-2 size-7" /> Node.js
-              </li>
-              <li className="flex items-center">
-                <SiMongodb className="mr-2 size-7" /> MongoDB
-              </li>
-            </ul>
-          </div>
+            );
+          })}
+        </ul>
         </div>
       </div>
-    </section>
-    
+
+      <div className="mt-8 flex flex-wrap gap-5 font-mono text-xs text-slate-500">
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-sm border border-sky-400 bg-sky-400/20" />root</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-sm border border-violet-400 bg-violet-400/20" />internal node</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-sm border border-slate-600 bg-slate-900" />leaf</span>
+      </div>
+    </Section>
   );
 };
 
