@@ -98,13 +98,13 @@ export function buildLevel() {
   bitRow(6400, 400, 3);
   pad(6550, 330, 220);
   node(6594, 190, mini[0]);
-  node(6726, 190, mini[1], "node", 26); // lifted label so it doesn't overlap its neighbour
+  node(6726, 190, mini[1], "node", 26);
   bug(6790, 6930);
   node(6950, LOW, mini[2]);
   pad(7150, 270, 176);
   node(7216, 130, mini[3]);
   bug(7300, 7470);
-  node(7500, LOW, mini[4]);
+  bitRow(7480, 400, 3);
 
   zone("contact", "05", "MAINFRAME", 7700, 8800);
   const contact = item("contact", "Contact & Resume", profile, "contact");

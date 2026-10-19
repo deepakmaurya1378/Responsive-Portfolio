@@ -27,8 +27,6 @@ const Projects = () => {
   return (
     <Section id="projects">
       <SectionHeading
-        index="05"
-        ds="Linked List"
         title="Projects"
         code={
           <>

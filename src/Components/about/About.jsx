@@ -29,8 +29,6 @@ const About = () => {
   return (
     <Section id="about" className="bg-slate-900/30">
       <SectionHeading
-        index="02"
-        ds="String"
         title="About me"
         code={
           <>

@@ -52,7 +52,7 @@ const CodeCard = () => (
 
 function Home() {
   return (
-    <section id="top" className="relative overflow-hidden pb-16 pt-28 sm:pt-32 md:pb-28 md:pt-40">
+    <section id="top" className="relative overflow-hidden pb-10 pt-28 sm:pt-32 md:pb-16 md:pt-36">
       <div
         className="pointer-events-none absolute inset-0 opacity-40"
         style={{

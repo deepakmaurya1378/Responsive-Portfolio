@@ -15,8 +15,6 @@ const Education = () => {
   return (
     <Section id="education" className="bg-slate-900/30">
       <SectionHeading
-        index="04"
-        ds="Queue"
         title="Education"
         code={
           <>

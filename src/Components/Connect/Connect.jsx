@@ -221,8 +221,6 @@ const Contact = () => {
   return (
     <Section id="contact" className="bg-slate-900/30">
       <SectionHeading
-        index="08"
-        ds="Recursion"
         title="Let's work together"
       />
 

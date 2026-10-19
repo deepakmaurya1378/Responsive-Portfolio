@@ -51,12 +51,31 @@ const SKYLINE_FAR = Array.from({ length: 40 }, (_, i) => ({ x: i * 62 + ((i * 37
 const SKYLINE_NEAR = Array.from({ length: 34 }, (_, i) => ({ x: i * 150 + ((i * 59) % 60), w: 70 + ((i * 41) % 60), h: 120 + ((i * 89) % 160), sign: i % 4 === 1 }));
 const fresh = () => level.bugs.map((b) => ({ ...b }));
 
+// Where the hero is, plus bits and bugs, saved for this tab so a refresh resumes the run.
+const SESSION_KEY = "pq-session";
+const loadSession = () => {
+  try {
+    return JSON.parse(sessionStorage.getItem(SESSION_KEY)) || null;
+  } catch {
+    return null;
+  }
+};
+const startPlayer = (saved) => {
+  const p = createPlayer(level.spawnX);
+  if (saved?.x != null) {
+    p.x = Math.max(0, Math.min(level.worldW - p.w, saved.x));
+    p.y = Math.min(saved.y, GROUND_Y - p.h);
+  }
+  return p;
+};
+
 export default function Game({ onClassic }) {
-  const [started, setStarted] = useState(false);
+  const [saved] = useState(loadSession);
+  const [started, setStarted] = useState(() => !!saved?.started);
   const [bootStep, setBootStep] = useState(0);
   const [revealed, setRevealed] = useState(loadProgress);
-  const [bitsTaken, setBitsTaken] = useState(() => new Set());
-  const [bugsFixed, setBugsFixed] = useState(() => new Set());
+  const [bitsTaken, setBitsTaken] = useState(() => new Set(saved?.bits || []));
+  const [bugsFixed, setBugsFixed] = useState(() => new Set(saved?.bugs || []));
   const [open, setOpen] = useState(null); // { item, isNew }
   const [journal, setJournal] = useState(false);
   const [zoneKey, setZoneKey] = useState("boot");
@@ -70,10 +89,17 @@ export default function Game({ onClassic }) {
   const [view, setView] = useState({ w: window.innerWidth, h: window.innerHeight });
   const [touchUI] = useState(() => window.matchMedia?.("(pointer: coarse)").matches ?? false);
 
-  const scale = Math.min(view.h / WORLD_H, view.w / 600);
+  const showPads = touchUI || view.w < 768;
+  const portrait = showPads && view.h > view.w;
+  const compactHud = view.w < 640 || view.h < 500;
+  const HUD_H = compactHud ? 44 : 56;
+  const DOCK_H = portrait ? Math.min(170, Math.round(view.h * 0.2)) : 0;
+  const scale = portrait
+    ? Math.min((view.h - DOCK_H - HUD_H) / WORLD_H, view.w / 420)
+    : Math.min(view.h / WORLD_H, view.w / 600);
   const logicalW = view.w / scale;
 
-  const player = useRef(createPlayer(level.spawnX));
+  const player = useRef(startPlayer(saved));
   const input = useRef({ left: false, right: false, jump: false, jumpPressed: false });
   const bugs = useRef(fresh());
   const bugEls = useRef([]);
@@ -85,6 +111,7 @@ export default function Game({ onClassic }) {
   const bitsRef = useRef(bitsTaken);
   const fixedRef = useRef(bugsFixed);
   const pausedRef = useRef(true);
+  const startedRef = useRef(started);
   const viewRef = useRef(logicalW);
   const hitRef = useRef(null);
   const beaconRef = useRef(null);
@@ -93,6 +120,7 @@ export default function Game({ onClassic }) {
 
   useEffect(() => {
     pausedRef.current = !started || !!open || journal;
+    startedRef.current = started;
   }, [started, open, journal]);
   useEffect(() => {
     viewRef.current = logicalW;
@@ -100,6 +128,27 @@ export default function Game({ onClassic }) {
 
   useEffect(() => {
     if (import.meta.env.DEV) window.__pq = { player, level, input, bugs };
+  }, []);
+
+  useEffect(() => {
+    const save = () => {
+      try {
+        const p = player.current;
+        sessionStorage.setItem(
+          SESSION_KEY,
+          JSON.stringify({ x: p.x, y: p.y, started: startedRef.current, bits: [...bitsRef.current], bugs: [...fixedRef.current] })
+        );
+      } catch {
+        /* storage blocked */
+      }
+    };
+    const t = setInterval(save, 1000);
+    window.addEventListener('pagehide', save);
+    return () => {
+      save();
+      clearInterval(t);
+      window.removeEventListener('pagehide', save);
+    };
   }, []);
 
   useEffect(() => {
@@ -342,17 +391,21 @@ export default function Game({ onClassic }) {
     setBugsFixed(fixedRef.current);
     bugs.current = fresh();
     player.current = createPlayer(level.spawnX);
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+    } catch {
+      /* storage blocked */
+    }
   };
 
   const zone = level.zones.find((z) => z.key === zoneKey) || level.zones[0];
-  const showPads = touchUI || view.w < 768;
   const pad2 = (n) => String(n).padStart(2, "0");
 
   return (
     <div className="pq-root">
       <div className="pq-sun" />
 
-      <div className="pq-stage" style={{ width: logicalW, height: WORLD_H, transform: `scale(${scale})` }}>
+      <div className="pq-stage" style={{ width: logicalW, height: WORLD_H, bottom: DOCK_H, transform: `scale(${scale})` }}>
         <div ref={farRef} className="pq-layer">
           {SKYLINE_FAR.map((b, i) => (
             <div key={i} className="pq-bldg-far" style={{ left: b.x, width: b.w, height: b.h, top: GROUND_Y - b.h }} />
@@ -372,7 +425,7 @@ export default function Game({ onClassic }) {
           {level.signs.map((s, i) => {
             if (s.type === "intro")
               return (
-                <div key={i} className="pq-term pq-mono" style={{ left: s.x, top: 64, width: 460 }}>
+                <div key={i} className="pq-term pq-mono" style={portrait ? { left: 16, top: 70, width: 460, transform: "scale(0.84)", transformOrigin: "top left" } : { left: s.x, top: 64, width: 460 }}>
                   <div className="pq-term-bar">
                     <span /><span /><span />
                     <em>deepak@portfolio: ~</em>
@@ -493,37 +546,44 @@ export default function Game({ onClassic }) {
 
       <div className="pq-scanlines" />
 
-      <div className="pq-hud pq-mono">
+      <div className={`pq-hud pq-mono ${compactHud ? "pq-hud-compact" : ""}`} style={{ height: HUD_H }}>
         <p className="pq-prompt">
-          deepak@portfolio:<span>{zone.key === "boot" ? "~" : `~/${zone.key}`}</span>$<span className="pq-cursor" />
+          {!compactHud && "deepak@portfolio:"}
+          <span>{zone.key === "boot" ? "~" : `~/${zone.key}`}</span>$<span className="pq-cursor" />
         </p>
         <div className="pq-stats">
-          <p>BITS <b>{pad2(bitsTaken.size)}</b></p>
-          <p>BUGS FIXED <b>{pad2(bugsFixed.size)}</b></p>
-          <p>DATA <b>{pad2(revealed.size)}/{TOTAL}</b></p>
-          <div className="hidden sm:flex items-center gap-2">
-            THRUST
-            <div className="pq-fuel"><div style={{ width: `${fuel * 100}%` }} /></div>
-          </div>
+          <p title="Bits collected">{compactHud ? "◆" : "BITS"} <b>{pad2(bitsTaken.size)}</b></p>
+          <p title="Bugs fixed">{compactHud ? "🐞" : "BUGS FIXED"} <b>{pad2(bugsFixed.size)}</b></p>
+          <p title="Data decrypted">{compactHud ? "▣" : "DATA"} <b>{pad2(revealed.size)}/{TOTAL}</b></p>
+          {!compactHud && (
+            <div className="flex items-center gap-2">
+              THRUST
+              <div className="pq-fuel"><div style={{ width: `${fuel * 100}%` }} /></div>
+            </div>
+          )}
           <button type="button" className="pq-btn pq-btn-sm" onClick={() => { releaseKeys(); setJournal(true); }}>
             FILES
           </button>
-          <button type="button" className="pq-btn pq-btn-sm pq-btn-ghost" onClick={onClassic}>
-            CLASSIC VIEW
+          <button type="button" className="pq-btn pq-btn-sm pq-btn-ghost" onClick={onClassic} aria-label="Classic view">
+            {compactHud ? "EXIT" : "CLASSIC VIEW"}
           </button>
         </div>
       </div>
 
-      {showPads && started && view.h > view.w && <div className="pq-rotate pq-mono">↻ rotate for a bigger view</div>}
-
       {toast && <div className="pq-toast pq-mono">{toast}</div>}
 
       {showPads && started && !open && !journal && (
-        <div className="pq-touch">
-          <div className="flex gap-3">
+        <div className={portrait ? "pq-dock" : "pq-touch"} style={portrait ? { height: DOCK_H } : undefined}>
+          <div className="pq-dpad">
             <button type="button" className="pq-pad" aria-label="Move left" {...hold("left")}>{"◀︎"}</button>
             <button type="button" className="pq-pad" aria-label="Move right" {...hold("right")}>{"▶︎"}</button>
           </div>
+          {portrait && (
+            <div className="pq-dock-fuel pq-mono">
+              <span>THRUST</span>
+              <div className="pq-fuel"><div style={{ width: `${fuel * 100}%` }} /></div>
+            </div>
+          )}
           <button type="button" className="pq-pad pq-pad-jump pq-mono" aria-label="Jump (hold to fly)" {...hold("jump")}>JUMP</button>
         </div>
       )}
@@ -588,7 +648,7 @@ export default function Game({ onClassic }) {
           <button type="button" className="pq-btn" onClick={() => setStarted(true)} autoFocus>
             {revealed.size ? `▶ RESUME SESSION (${revealed.size}/${TOTAL})` : "▶ RUN PORTFOLIO.EXE"}
           </button>
-          <p className="pq-mono text-sm text-slate-400 mt-3">press ENTER to start</p>
+          {!touchUI && <p className="pq-mono text-sm text-slate-400 mt-3">press ENTER to start</p>}
           <button type="button" className="pq-link mt-6" onClick={onClassic}>
             Prefer a normal website? Open the classic view
           </button>

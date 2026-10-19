@@ -72,23 +72,6 @@ export const jobs = [
   },
 ];
 
-export const highlights = [
-  { value: "1+ yr", label: "Professional full-stack experience" },
-  { value: "40%", label: "Faster API responses (~800ms → ~480ms)" },
-  { value: "99.9%", label: "Application uptime supported" },
-  { value: "300+", label: "DSA problems on LeetCode & GeeksforGeeks", link: "https://leetcode.com/u/deepakmaurya1378/" },
-  { cert: true, value: "Java", label: "Java Programming Fundamentals" },
-  { cert: true, value: "OOP", label: "Object-Oriented Programming in Java" },
-  { cert: true, value: "Web", label: "Web Development: HTML, CSS & JavaScript" },
-];
-
-export const certifications = [
-  { title: "300+ DSA problems solved on LeetCode & GeeksforGeeks", link: "https://leetcode.com/u/deepakmaurya1378/" },
-  { title: "Java Programming Fundamentals" },
-  { title: "Object-Oriented Programming in Java" },
-  { title: "Web Development with HTML, CSS and JavaScript" },
-];
-
 export const education = [
   {
     title: "High School",
@@ -177,13 +160,13 @@ export const projects = [
     tags: ["Next.js", "Clerk", "Drizzle ORM", "PostgreSQL", "Gemini API"],
   },
   {
-    title: "Chat Application",
+    title: "Raven: Real-time Chat App",
     featured: true,
     image: chatAppImg,
     demoLink: "https://fullstack-chatapp-w3ne.onrender.com/login",
-    srcCode: "https://github.com/deepakmaurya1378/",
-    main: "A real-time chat app built on the MERN stack, with Socket.io for instant messaging and JWT for secure authentication.",
-    tags: ["React", "Node.js", "Express.js", "MongoDB", "Socket.io", "JWT"],
+    srcCode: "https://github.com/deepakmaurya1378/RAVEN-",
+    main: "A full-stack chat app for meeting strangers in real time, built on the MERN stack with Socket.io for instant messaging, Redux for state and JWT for secure authentication.",
+    tags: ["React", "Node.js", "Express.js", "MongoDB", "Socket.io", "Redux", "JWT"],
   },
   {
     title: "Neuro Nest: Online Therapy App",
@@ -227,10 +210,43 @@ export const projects = [
     main: "The classic two-player Tic Tac Toe game in the browser, with a reset button to start a new round.",
     tags: ["JavaScript"],
   },
+];
+
+export const highlights = [
   {
-    title: "Raven",
-    srcCode: "https://github.com/deepakmaurya1378/RAVEN-",
-    main: "A chat application where you can connect with strangers.",
-    tags: ["JavaScript"],
+    value: "1+ yr",
+    title: "Full-stack experience",
+    detail: "Production work at MeriLipi and INOX Software Solutions, from database schema to deployment.",
+    kind: "experience",
+  },
+  {
+    value: "Spring Boot",
+    title: "Java backend",
+    detail: "Secure REST APIs with Spring Security (JWT), Spring Data JPA, Hibernate and MySQL for a role-based food delivery platform.",
+    kind: "springboot",
+  },
+  {
+    value: "Node.js",
+    title: "APIs and real-time",
+    detail: "Express REST APIs and WebSockets for live classes, payments and learner progress, backed by MongoDB and MySQL.",
+    kind: "nodejs",
+  },
+  {
+    value: "40%",
+    title: "Performance optimisation",
+    detail: "Cut API response times from ~800ms to ~480ms with Redis caching and query optimization.",
+    kind: "performance",
+  },
+  {
+    value: "99.9%",
+    title: "DevOps and cloud",
+    detail: "Azure DevOps CI/CD pipelines, Azure App Service, Docker, AWS (S3, ECS) and Nginx behind 99.9% uptime.",
+    kind: "devops",
+  },
+  {
+    value: "1200",
+    title: "Rated chess player",
+    detail: "Chess keeps my thinking sharp: planning ahead, weighing trade-offs and staying calm under pressure.",
+    kind: "chess",
   },
 ];

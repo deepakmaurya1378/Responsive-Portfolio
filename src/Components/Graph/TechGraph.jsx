@@ -3,7 +3,7 @@ import { projects } from "../../data/portfolio";
 import useInView from "../../hooks/useInView";
 import { Fn, Section, SectionHeading, Str } from "../ui";
 
-const NORMALIZE = { "React.js": "React", "Tailwind CSS": "Tailwind" };
+const NORMALIZE = { "React.js": "React", "Tailwind CSS": "Tailwind", "Redux Toolkit": "Redux" };
 const shortTitle = (t) => t.split(":")[0];
 
 const W = 960;
@@ -154,8 +154,6 @@ const TechGraph = () => {
   return (
     <Section id="graph">
       <SectionHeading
-        index="07"
-        ds="Graph"
         title="How my work connects"
         code={
           <>

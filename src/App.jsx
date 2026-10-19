@@ -10,13 +10,24 @@ import Experience from "./Components/Experience/Experience"
 import Highlights from "./Components/Highlights/Highlights"
 import About from "./Components/about/About"
 import TechGraph from "./Components/Graph/TechGraph"
-import Roadmap from "./Components/Roadmap/Roadmap"
 import Game from "./game/Game"
 
 function App() {
-  const [mode, setMode] = useState("classic")
+  // New visits open the classic view; a refresh in the same tab keeps you in the game.
+  const [mode, setMode] = useState(() => {
+    try {
+      return sessionStorage.getItem("pq-mode") === "game" ? "game" : "classic"
+    } catch {
+      return "classic"
+    }
+  })
 
   useEffect(() => {
+    try {
+      sessionStorage.setItem("pq-mode", mode)
+    } catch {
+      /* storage blocked */
+    }
     window.scrollTo(0, 0)
   }, [mode])
 
@@ -27,7 +38,6 @@ function App() {
       <Navbar onPlay={() => setMode("game")} />
       <main>
         <Home />
-        <Roadmap />
         <Highlights />
         <About />
         <Experience />

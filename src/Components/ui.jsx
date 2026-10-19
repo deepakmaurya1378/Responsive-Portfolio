@@ -3,12 +3,12 @@ import { useRef } from "react";
 import useInView from "../hooks/useInView";
 
 export const Section = ({ id, children, className = "" }) => (
-  <section id={id} className={`scroll-mt-20 py-20 md:py-28 ${className}`}>
+  <section id={id} className={`scroll-mt-16 py-14 md:py-20 ${className}`}>
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">{children}</div>
   </section>
 );
 
-export const SectionHeading = ({ index, ds, title, subtitle, code }) => {
+export const SectionHeading = ({ title, subtitle, code }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { threshold: 0.4 });
   const anim = (delay) => ({
@@ -16,20 +16,15 @@ export const SectionHeading = ({ index, ds, title, subtitle, code }) => {
     animation: inView ? `ds-fade-up 650ms cubic-bezier(.2,.8,.2,1) ${delay}ms both` : "none",
   });
   return (
-  <div ref={ref} className="mb-10 md:mb-14">
-    <p style={anim(0)} className="inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-widest text-sky-300 md:text-sm">
-      <span className="text-sky-500">{index}</span>
-      <span className="text-slate-600">·</span>
-      {ds}
-    </p>
-    <h2 style={anim(90)} className="mt-4 text-4xl font-extrabold tracking-tight text-white md:text-5xl">{title}</h2>
+  <div ref={ref} className="mb-7 md:mb-9">
+    <h2 style={anim(0)} className="text-4xl font-extrabold tracking-tight text-white md:text-5xl">{title}</h2>
     <div
-      className="mt-5 h-1 w-20 origin-left rounded-full bg-gradient-to-r from-sky-400 to-violet-500"
+      className="mt-4 h-1 w-20 origin-left rounded-full bg-gradient-to-r from-sky-400 to-violet-500"
       style={{ transform: inView ? undefined : "scaleX(0)", animation: inView ? "ds-grow-x 700ms ease-out 250ms both" : "none" }}
     />
-    {subtitle && <p style={anim(200)} className="mt-5 max-w-2xl text-lg text-slate-400">{subtitle}</p>}
+    {subtitle && <p style={anim(200)} className="mt-4 max-w-2xl text-lg text-slate-400">{subtitle}</p>}
     {code && (
-      <pre style={anim(300)} className="mt-6 max-w-full overflow-x-auto whitespace-pre-wrap break-words rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-3 font-mono text-[13px] leading-6 text-slate-300 sm:text-sm">
+      <pre style={anim(300)} className="mt-5 max-w-full overflow-x-auto whitespace-pre-wrap break-words rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-3 font-mono text-[13px] leading-6 text-slate-300 sm:text-sm">
         <code className={inView ? "ds-type ds-caret" : "opacity-0"} style={{ animationDelay: "450ms" }}>
           {code}
         </code>

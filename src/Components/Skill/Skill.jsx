@@ -67,8 +67,6 @@ const Skills = () => {
   return (
     <Section id="skills" className="bg-slate-900/30">
       <SectionHeading
-        index="06"
-        ds="Tree"
         title="Skills"
         code={
           <>
@@ -77,7 +75,7 @@ const Skills = () => {
         }
       />
 
-      <div className="mb-8 flex flex-wrap items-center gap-3 font-mono text-sm">
+      <div className="mb-6 flex flex-wrap items-center gap-3 font-mono text-sm">
         <button
           type="button"
           onClick={() => start("DFS")}

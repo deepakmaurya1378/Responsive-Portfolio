@@ -483,6 +483,42 @@ button.pq-file:hover { border-color: var(--pq-cyan); color: #fff; }
   .pq-start .pq-float { height: 80px; display: flex; align-items: center; }
 }
 
+/* Phones: one-line HUD */
+.pq-hud { flex-wrap: nowrap; box-sizing: border-box; padding-top: max(6px, env(safe-area-inset-top)); }
+.pq-prompt { min-width: 0; flex: 1 1 auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.pq-stats { flex: 0 0 auto; flex-wrap: nowrap; }
+.pq-hud-compact { font-size: 17px; padding-left: 10px; padding-right: 10px; gap: 10px; }
+.pq-hud-compact .pq-stats { gap: 10px; }
+.pq-hud-compact .pq-btn-sm { font-size: 16px; padding: 4px 8px; }
+
+/* Phones, portrait: a controller dock under the game world */
+.pq-dock {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 30;
+  box-sizing: border-box;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 20px max(12px, env(safe-area-inset-bottom));
+  background:
+    repeating-linear-gradient(90deg, #22e5ff0a 0 1px, transparent 1px 22px),
+    linear-gradient(#0b0620, #05020f);
+  border-top: 2px solid #22e5ff55;
+  box-shadow: 0 -10px 30px #22e5ff1a;
+}
+.pq-dpad { display: flex; gap: 12px; }
+.pq-dock .pq-pad { width: 70px; height: 70px; font-size: 26px; background: #0b1430; }
+.pq-dock .pq-pad-jump { width: 92px; height: 92px; font-size: 26px; background: #2a0620; }
+.pq-dock-fuel { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 15px; color: #8aa4c8; }
+.pq-dock-fuel .pq-fuel { width: 64px; }
+
+/* Phones, landscape: smaller, see-through buttons in the corners */
+.pq-touch .pq-dpad { gap: 10px; }
+@media (max-height: 500px) {
+  .pq-touch { bottom: max(10px, env(safe-area-inset-bottom)); padding: 0 max(14px, env(safe-area-inset-left)); }
+  .pq-touch .pq-pad { width: 56px; height: 56px; font-size: 20px; opacity: 0.75; }
+  .pq-touch .pq-pad-jump { width: 68px; height: 68px; }
+  .pq-toast { top: 54px; font-size: 20px; }
+}
+.pq-pad:active { transform: scale(0.94); }
+
 @media (prefers-reduced-motion: reduce) {
   .pq-node, .pq-node-star, .pq-bit, .pq-float, .pq-cursor, .pq-holo-screen, .pq-bldg-sign, .pq-mainframe-sign,
   .pq-title::before, .pq-title::after, .pq-tower-led, .pq-beacon-label, .pq-bug svg { animation: none; }

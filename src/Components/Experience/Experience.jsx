@@ -137,8 +137,6 @@ const Experience = () => {
   return (
     <Section id="experience">
       <SectionHeading
-        index="03"
-        ds="Stack"
         title="Experience"
         code={
           <>
