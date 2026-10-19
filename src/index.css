@@ -1,3 +1,90 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-slate-950 text-slate-300 font-sans antialiased; }
+  ::selection { @apply bg-sky-400/30 text-white; }
+}
+
+/* ---------- Classic view animations (used through <Reveal anim="..."> and ds-* classes) ---------- */
+@keyframes ds-fade-up { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes ds-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ds-fade-left { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+@keyframes ds-pop {
+  0% { opacity: 0; transform: scale(0.5); }
+  70% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: none; }
+}
+/* stack push: drops in from above and settles */
+@keyframes ds-push {
+  0% { opacity: 0; transform: translateY(-120px); }
+  65% { opacity: 1; transform: translateY(8px); }
+  82% { transform: translateY(-3px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes ds-pop-out { to { opacity: 0; transform: translateY(-120px) scale(0.96); } }
+/* queue enqueue: slides in from the rear */
+@keyframes ds-enqueue { from { opacity: 0; transform: translateX(120px); } to { opacity: 1; transform: none; } }
+/* recursion: each call frame opens inside its caller */
+@keyframes ds-descend { from { opacity: 0; transform: scale(0.96) translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes ds-grow-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes ds-grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* code lines "type" themselves out */
+@keyframes ds-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.ds-type { display: inline-block; animation: ds-type 1.1s steps(36, end) both; }
+.ds-caret::after {
+  content: "";
+  display: inline-block;
+  width: 0.55em; height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: #38bdf8;
+  animation: ds-blink 1s steps(1) infinite;
+}
+@keyframes ds-blink { 50% { opacity: 0; } }
+
+/* travelling "data" dot along a pointer / pipe */
+@keyframes ds-travel-y { from { top: -6px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { top: 100%; opacity: 0; } }
+@keyframes ds-travel-x { from { right: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { right: 100%; opacity: 0; } }
+.ds-dot-y { position: absolute; left: 50%; width: 8px; height: 8px; margin-left: -4px; border-radius: 9999px; background: #38bdf8; box-shadow: 0 0 10px #38bdf8; animation: ds-travel-y 1.6s ease-in infinite; }
+.ds-dot-x { position: absolute; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 9999px; background: #a78bfa; box-shadow: 0 0 12px #a78bfa; animation: ds-travel-x 4.5s linear infinite; }
+
+/* queue conveyor: dashes flowing toward the front */
+@keyframes ds-flow { to { background-position: -40px 0; } }
+.ds-conveyor {
+  height: 2px;
+  background: repeating-linear-gradient(90deg, #475569 0 20px, transparent 20px 40px);
+  animation: ds-flow 1.2s linear infinite;
+}
+
+/* SVG edges drawing themselves (path needs pathLength="1") */
+@keyframes ds-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.ds-edge { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.ds-edge-on { animation: ds-draw 1.1s ease-out both; }
+
+/* one-off attention pulse */
+@keyframes ds-ping-ring { 0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.55); } 100% { box-shadow: 0 0 0 14px rgba(56, 189, 248, 0); } }
+.ds-ping { animation: ds-ping-ring 0.9s ease-out 2; }
+
+/* slow drifting glow in the hero */
+@keyframes ds-drift { 50% { transform: translate(-46%, 30px) scale(1.08); } }
+@keyframes ds-shimmer { to { background-position: 200% center; } }
+.ds-shimmer {
+  background: linear-gradient(90deg, #fff 0%, #7dd3fc 25%, #c4b5fd 50%, #fff 75%) 0 center / 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: ds-shimmer 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  .ds-edge { stroke-dashoffset: 0; }
+}
+
+main *, footer * { scrollbar-width: none; -ms-overflow-style: none; }
+main *::-webkit-scrollbar, footer *::-webkit-scrollbar { display: none; }
