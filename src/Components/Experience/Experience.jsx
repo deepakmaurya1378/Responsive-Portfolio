@@ -45,7 +45,7 @@ const JobCard = ({ job, isTop, index, flash }) => (
     {job.work && (
       <div className="mt-6">
         <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-300">Products I worked on</p>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:px-0">
           {job.work.map((w) => {
             const inner = (
               <>
@@ -63,7 +63,7 @@ const JobCard = ({ job, isTop, index, flash }) => (
                 </p>
               </>
             );
-            const cls = "group overflow-hidden rounded-xl border border-slate-800 bg-slate-950/50 transition-colors";
+            const cls = "group w-[72%] shrink-0 snap-start overflow-hidden rounded-xl border border-slate-800 bg-slate-950/50 transition-colors sm:w-auto";
             return w.link ? (
               <a key={w.title} href={w.link} target="_blank" rel="noopener noreferrer" className={`${cls} hover:border-sky-400/50`}>
                 {inner}
@@ -148,7 +148,7 @@ const Experience = () => {
         }
       />
 
-      <div className="grid gap-4 sm:gap-6 lg:grid-cols-[1fr_270px]">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_270px]">
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs sm:text-sm">
             <span className="rounded bg-sky-400 px-2 py-0.5 font-semibold text-slate-950">TOP</span>
@@ -179,7 +179,7 @@ const Experience = () => {
           <p className="mt-2 text-center font-mono text-xs text-slate-600">bottom of stack</p>
         </div>
 
-        <aside className="order-first h-fit rounded-2xl border border-slate-800 bg-slate-900/60 p-4 font-mono text-sm sm:p-5 lg:sticky lg:top-24 lg:order-none">
+        <aside className="order-first h-fit min-w-0 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 font-mono text-sm sm:p-5 lg:sticky lg:top-24 lg:order-none">
           <p className="text-xs uppercase tracking-wider text-slate-500">operations</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <OpButton onClick={peek} disabled={!top}>peek()</OpButton>
@@ -192,7 +192,7 @@ const Experience = () => {
           <div className="mt-3 space-y-1 rounded-lg border border-slate-800 bg-slate-950/70 p-3 text-xs">
             {log.length === 0 && <p className="text-slate-600">$ waiting…</p>}
             {log.map((l) => (
-              <Reveal key={l.k} anim="fade-left" duration={300} show className="truncate text-emerald-300">
+              <Reveal key={l.k} anim="fade-left" duration={300} show className="break-words text-emerald-300 lg:truncate">
                 <span className="text-slate-600">$ </span>
                 {l.text}
               </Reveal>

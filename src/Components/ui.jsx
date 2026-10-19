@@ -29,7 +29,7 @@ export const SectionHeading = ({ index, ds, title, subtitle, code }) => {
     />
     {subtitle && <p style={anim(200)} className="mt-5 max-w-2xl text-lg text-slate-400">{subtitle}</p>}
     {code && (
-      <pre style={anim(300)} className="mt-6 max-w-full overflow-x-auto rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-3 font-mono text-[13px] leading-6 text-slate-300 sm:text-sm">
+      <pre style={anim(300)} className="mt-6 max-w-full overflow-x-auto whitespace-pre-wrap break-words rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-3 font-mono text-[13px] leading-6 text-slate-300 sm:text-sm">
         <code className={inView ? "ds-type ds-caret" : "opacity-0"} style={{ animationDelay: "450ms" }}>
           {code}
         </code>
